@@ -1,181 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Ultra Hacker Dashboard Demo</title>
+<title>Dukaan Hisaab</title>
 <style>
-body, html{
-  margin:0;
-  padding:0;
-  height:100%;
-  background:black;
-  color:#0f0;
-  font-family: monospace;
-  overflow:hidden;
+body{
+    font-family: Arial;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
 }
-
-canvas{
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:0;
+table{
+    width:100%;
+    border-collapse: collapse;
 }
-
-header{
-  position:relative;
-  z-index:1;
-  background:#111;
-  padding:10px;
-  text-align:center;
-  font-size:24px;
-  border-bottom:1px solid #0f0;
+th,td{
+    border:1px solid black;
+    padding:8px;
+    text-align:center;
 }
-
-.container{
-  position:relative;
-  z-index:1;
-  display:flex;
-  height:calc(100% - 50px);
-}
-
-.sidebar{
-  width:250px;
-  background:#111;
-  border-right:1px solid #0f0;
-  padding:10px;
-}
-
-.sidebar p{
-  margin:10px 0;
-  cursor:pointer;
-  transition:0.2s;
-}
-.sidebar p:hover{
-  color:#fff;
-}
-
-.main{
-  flex:1;
-  padding:20px;
-  overflow:auto;
-}
-
-.terminal{
-  background:#000;
-  color:#0f0;
-  border:1px solid #0f0;
-  height:400px;
-  padding:10px;
-  overflow:auto;
-}
-
 input{
-  width:100%;
-  background:black;
-  color:#0f0;
-  border:none;
-  outline:none;
-  font-family: monospace;
-  font-size:16px;
+    width:80px;
 }
-
-.bar{
-  background:#0f0;
-  height:5px;
-  width:0%;
-  margin-top:5px;
+button{
+    padding:10px 20px;
+    margin-top:20px;
 }
 </style>
 </head>
 <body>
 
-<canvas id="matrix"></canvas>
+<h2>Dukaan Hisaab Calculator</h2>
 
-<header>Ultra Hacker Dashboard Demo</header>
+<table>
+<tr>
+<th>Product</th>
+<th>Price</th>
+<th>Pichhla Maal</th>
+<th>Naya Maal</th>
+<th>Bika</th>
+<th>Bacha</th>
+</tr>
 
-<div class="container">
-    <div class="sidebar">
-        <p onclick="fakeLoad('Network Scan')">Network Scan</p>
-        <p onclick="fakeLoad('Password List Fetch')">Password List</p>
-        <p onclick="fakeLoad('Packet Analysis')">Packet Analysis</p>
-        <p onclick="clearTerminal()">Clear Logs</p>
-    </div>
-    <div class="main">
-        <div class="terminal" id="terminal">
-            <p>> Welcome to Ultra Hacker Demo</p>
-        </div>
-        <input type="text" id="cmd" placeholder="Enter command..." onkeydown="run(event)">
-    </div>
-</div>
+<tr>
+<td>Agarbatti</td>
+<td>10</td>
+<td><input type="number" id="p1"></td>
+<td><input type="number" id="n1"></td>
+<td><input type="number" id="s1"></td>
+<td id="r1">0</td>
+</tr>
+
+<tr>
+<td>Gulabjal</td>
+<td>40</td>
+<td><input type="number" id="p2"></td>
+<td><input type="number" id="n2"></td>
+<td><input type="number" id="s2"></td>
+<td id="r2">0</td>
+</tr>
+
+<tr>
+<td>Dashang</td>
+<td>10</td>
+<td><input type="number" id="p3"></td>
+<td><input type="number" id="n3"></td>
+<td><input type="number" id="s3"></td>
+<td id="r3">0</td>
+</tr>
+
+<tr>
+<td>Kishmish</td>
+<td>10</td>
+<td><input type="number" id="p4"></td>
+<td><input type="number" id="n4"></td>
+<td><input type="number" id="s4"></td>
+<td id="r4">0</td>
+</tr>
+
+<tr>
+<td>Celandar</td>
+<td>10</td>
+<td><input type="number" id="p5"></td>
+<td><input type="number" id="n5"></td>
+<td><input type="number" id="s5"></td>
+<td id="r5">0</td>
+</tr>
+
+</table>
+
+<br>
+
+<label>Extra Kharch (₹): </label>
+<input type="number" id="expense" value="0">
+
+<br><br>
+
+<button onclick="calculate()">Calculate</button>
+
+<h3 id="sales"></h3>
+<h3 id="profit"></h3>
 
 <script>
-// Matrix Effect
-let canvas = document.getElementById('matrix');
-let ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function calculate(){
 
-let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
-letters = letters.split("");
-let fontSize = 16;
-let columns = canvas.width/fontSize;
-let drops = [];
-for(let x=0;x<columns;x++) drops[x]=1;
+let prices=[10,40,10,10,10];
+let totalSales=0;
 
-function draw(){
-  ctx.fillStyle="rgba(0,0,0,0.05)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#0f0";
-  ctx.font = fontSize+"px monospace";
-  for(let i=0;i<drops.length;i++){
-    let text = letters[Math.floor(Math.random()*letters.length)];
-    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-    if(drops[i]*fontSize>canvas.height && Math.random()>0.975) drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(draw,33);
+for(let i=1;i<=5;i++){
 
-// Terminal Command
-function log(text){
-    let term = document.getElementById("terminal");
-    term.innerHTML += "<p>> "+text+"</p>";
-    term.scrollTop = term.scrollHeight;
+let p=Number(document.getElementById("p"+i).value)||0;
+let n=Number(document.getElementById("n"+i).value)||0;
+let s=Number(document.getElementById("s"+i).value)||0;
+
+let remain=p+n-s;
+
+document.getElementById("r"+i).innerText=remain;
+
+totalSales += s*prices[i-1];
 }
 
-function run(e){
-    if(e.key==="Enter"){
-        let input = document.getElementById("cmd").value;
-        if(input=="clear"){
-            clearTerminal();
-        } else {
-            log(input);
-            log("Command executed successfully (Demo)");
-        }
-        document.getElementById("cmd").value="";
-    }
-}
+let expense=Number(document.getElementById("expense").value)||0;
 
-function clearTerminal(){
-    document.getElementById("terminal").innerHTML="";
-}
+let finalProfit=totalSales-expense;
 
-function fakeLoad(task){
-    log(task+" started...");
-    let bar = document.createElement("div");
-    bar.className="bar";
-    document.getElementById("terminal").appendChild(bar);
-    let width=0;
-    let interval = setInterval(()=>{
-        width+=Math.random()*10;
-        if(width>=100){
-            width=100;
-            clearInterval(interval);
-            log(task+" completed.");
-            bar.remove();
-        }
-        bar.style.width=width+"%";
-    },200);
+document.getElementById("sales").innerText=
+"Total Bikri = ₹"+totalSales;
+
+document.getElementById("profit").innerText=
+"Kharch Katne Ke Baad = ₹"+finalProfit;
 }
 </script>
 
