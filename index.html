@@ -1,40 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dukaan Hisaab</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dukaan Hisaab Calculator</title>
+
 <style>
 body{
-    font-family: Arial;
-    max-width: 700px;
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
     margin: auto;
-    padding: 20px;
+    padding: 15px;
 }
+
+h2{
+    text-align:center;
+}
+
+.table-container{
+    overflow-x:auto;
+}
+
 table{
     width:100%;
-    border-collapse: collapse;
+    border-collapse:collapse;
+    min-width:800px;
 }
+
 th,td{
     border:1px solid black;
     padding:8px;
     text-align:center;
 }
+
 input{
-    width:80px;
+    width:70px;
+    padding:5px;
 }
+
 button{
     padding:10px 20px;
     margin-top:20px;
+    cursor:pointer;
+}
+
+.result{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:15px;
 }
 </style>
 </head>
+
 <body>
 
 <h2>Dukaan Hisaab Calculator</h2>
 
+<div class="table-container">
 <table>
+
 <tr>
 <th>Product</th>
-<th>Price</th>
+<th>Price (₹)</th>
 <th>Pichhla Maal</th>
 <th>Naya Maal</th>
 <th>Bika</th>
@@ -46,8 +73,8 @@ button{
 <td>10</td>
 <td><input type="number" id="p1"></td>
 <td><input type="number" id="n1"></td>
-<td><input type="number" id="s1"></td>
-<td id="r1">0</td>
+<td id="s1">0</td>
+<td><input type="number" id="r1"></td>
 </tr>
 
 <tr>
@@ -55,8 +82,8 @@ button{
 <td>40</td>
 <td><input type="number" id="p2"></td>
 <td><input type="number" id="n2"></td>
-<td><input type="number" id="s2"></td>
-<td id="r2">0</td>
+<td id="s2">0</td>
+<td><input type="number" id="r2"></td>
 </tr>
 
 <tr>
@@ -64,8 +91,8 @@ button{
 <td>10</td>
 <td><input type="number" id="p3"></td>
 <td><input type="number" id="n3"></td>
-<td><input type="number" id="s3"></td>
-<td id="r3">0</td>
+<td id="s3">0</td>
+<td><input type="number" id="r3"></td>
 </tr>
 
 <tr>
@@ -73,8 +100,8 @@ button{
 <td>10</td>
 <td><input type="number" id="p4"></td>
 <td><input type="number" id="n4"></td>
-<td><input type="number" id="s4"></td>
-<td id="r4">0</td>
+<td id="s4">0</td>
+<td><input type="number" id="r4"></td>
 </tr>
 
 <tr>
@@ -82,53 +109,70 @@ button{
 <td>10</td>
 <td><input type="number" id="p5"></td>
 <td><input type="number" id="n5"></td>
-<td><input type="number" id="s5"></td>
-<td id="r5">0</td>
+<td id="s5">0</td>
+<td><input type="number" id="r5"></td>
+</tr>
+
+<tr>
+<td>Mala</td>
+<td>30</td>
+<td><input type="number" id="p6"></td>
+<td><input type="number" id="n6"></td>
+<td id="s6">0</td>
+<td><input type="number" id="r6"></td>
 </tr>
 
 </table>
+</div>
 
 <br>
 
-<label>Extra Kharch (₹): </label>
+<label><b>Extra Kharch (₹): </b></label>
 <input type="number" id="expense" value="0">
 
 <br><br>
 
 <button onclick="calculate()">Calculate</button>
 
-<h3 id="sales"></h3>
-<h3 id="profit"></h3>
+<div class="result" id="sales"></div>
+<div class="result" id="profit"></div>
 
 <script>
+
 function calculate(){
 
-let prices=[10,40,10,10,10];
+let prices=[10,40,10,10,10,30];
 let totalSales=0;
 
-for(let i=1;i<=5;i++){
+for(let i=1;i<=6;i++){
 
 let p=Number(document.getElementById("p"+i).value)||0;
 let n=Number(document.getElementById("n"+i).value)||0;
-let s=Number(document.getElementById("s"+i).value)||0;
+let bacha=Number(document.getElementById("r"+i).value)||0;
 
-let remain=p+n-s;
+let bika=(p+n)-bacha;
 
-document.getElementById("r"+i).innerText=remain;
+if(bika<0){
+    bika=0;
+}
 
-totalSales += s*prices[i-1];
+document.getElementById("s"+i).innerText=bika;
+
+totalSales += bika*prices[i-1];
 }
 
 let expense=Number(document.getElementById("expense").value)||0;
 
-let finalProfit=totalSales-expense;
+let finalAmount=totalSales-expense;
 
-document.getElementById("sales").innerText=
-"Total Bikri = ₹"+totalSales;
+document.getElementById("sales").innerHTML=
+"💰 Total Bikri = ₹" + totalSales;
 
-document.getElementById("profit").innerText=
-"Kharch Katne Ke Baad = ₹"+finalProfit;
+document.getElementById("profit").innerHTML=
+"📊 Kharch Katne Ke Baad = ₹" + finalAmount;
+
 }
+
 </script>
 
 </body>
