@@ -131,8 +131,8 @@ button{
 <input type="number" id="expense" value="0">
 
 <br><br>
-
 <button onclick="calculate()">Calculate</button>
+<button onclick="downloadReceipt()">Download Receipt</button>
 
 <div class="result" id="sales"></div>
 <div class="result" id="profit"></div>
@@ -170,7 +170,54 @@ document.getElementById("sales").innerHTML=
 
 document.getElementById("profit").innerHTML=
 "📊 Kharch Katne Ke Baad = ₹" + finalAmount;
+function downloadReceipt(){
 
+let receipt = "Dukaan Hisaab Receipt\n";
+receipt += "Date: " + new Date().toLocaleDateString() + "\n\n";
+
+let products = [
+["Agarbatti",10],
+["Gulabjal",40],
+["Dashang",10],
+["Kishmish",10],
+["Celandar",10],
+["Mala",30]
+];
+
+let totalSales = 0;
+
+for(let i=1;i<=6;i++){
+
+let p=Number(document.getElementById("p"+i).value)||0;
+let n=Number(document.getElementById("n"+i).value)||0;
+let bacha=Number(document.getElementById("r"+i).value)||0;
+
+let bika=(p+n)-bacha;
+if(bika<0) bika=0;
+
+let amount=bika*products[i-1][1];
+totalSales += amount;
+
+receipt += products[i-1][0] + " : " +
+bika + " x ₹" +
+products[i-1][1] +
+" = ₹" + amount + "\n";
+}
+
+let expense=Number(document.getElementById("expense").value)||0;
+let finalAmount=totalSales-expense;
+
+receipt += "\n-----------------\n";
+receipt += "Total Bikri : ₹" + totalSales + "\n";
+receipt += "Extra Kharch : ₹" + expense + "\n";
+receipt += "Final Amount : ₹" + finalAmount;
+
+let blob = new Blob([receipt], {type:"text/plain"});
+let a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "Receipt.txt";
+a.click();
+}
 }
 
 </script>
