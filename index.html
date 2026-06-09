@@ -41,6 +41,7 @@ input{
 button{
     padding:10px 20px;
     margin-top:20px;
+    margin-right:10px;
     cursor:pointer;
 }
 
@@ -131,6 +132,7 @@ button{
 <input type="number" id="expense" value="0">
 
 <br><br>
+
 <button onclick="calculate()">Calculate</button>
 <button onclick="downloadReceipt()">Download Receipt</button>
 
@@ -165,11 +167,14 @@ let expense=Number(document.getElementById("expense").value)||0;
 
 let finalAmount=totalSales-expense;
 
-document.getElementById("sales").innerHTML=
+document.getElementById("sales").innerHTML =
 "💰 Total Bikri = ₹" + totalSales;
 
-document.getElementById("profit").innerHTML=
+document.getElementById("profit").innerHTML =
 "📊 Kharch Katne Ke Baad = ₹" + finalAmount;
+
+}
+
 function downloadReceipt(){
 
 let receipt = "Dukaan Hisaab Receipt\n";
@@ -198,26 +203,33 @@ if(bika<0) bika=0;
 let amount=bika*products[i-1][1];
 totalSales += amount;
 
-receipt += products[i-1][0] + " : " +
-bika + " x ₹" +
-products[i-1][1] +
+receipt += products[i-1][0] +
+" : " + bika +
+" x ₹" + products[i-1][1] +
 " = ₹" + amount + "\n";
 }
 
 let expense=Number(document.getElementById("expense").value)||0;
 let finalAmount=totalSales-expense;
 
-receipt += "\n-----------------\n";
+receipt += "\n----------------------\n";
 receipt += "Total Bikri : ₹" + totalSales + "\n";
 receipt += "Extra Kharch : ₹" + expense + "\n";
 receipt += "Final Amount : ₹" + finalAmount;
 
-let blob = new Blob([receipt], {type:"text/plain"});
-let a = document.createElement("a");
-a.href = URL.createObjectURL(blob);
+const blob = new Blob([receipt], {type:"text/plain"});
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
 a.download = "Receipt.txt";
+
+document.body.appendChild(a);
 a.click();
-}
+document.body.removeChild(a);
+
+URL.revokeObjectURL(url);
+
 }
 
 </script>
